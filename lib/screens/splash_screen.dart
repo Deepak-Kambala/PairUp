@@ -19,25 +19,42 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       if (loggedIn) {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) =>  HomeScreen()));
+          context,
+          MaterialPageRoute(builder: (_) => HomeScreen()),
+        );
       } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.indigo,
-      body: Center(
-        child: Text(
-          "PairUp",
-          style: TextStyle(
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFFF3A5A), // Tinder Pink
+              Color(0xFFFF7539), // Tinder Orange
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: const Center(
+          child: Text(
+            "PairUp",
+            style: TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

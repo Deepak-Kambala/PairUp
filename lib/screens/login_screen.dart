@@ -9,160 +9,143 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailCtrl = TextEditingController();
-  final TextEditingController _passwordCtrl = TextEditingController();
-  bool _obscurePassword = true;
-
-  void _signIn() {
-    // TODO: Add authentication logic
+  void _googleSignIn() {
+    // TODO: Implement Google Sign In
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const ProfileSetupScreen()),
     );
   }
 
-  void _googleSignIn() {
-    // TODO: Google sign in
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const ProfileSetupScreen()),
-    );
+  void _linkedinSignIn() {
+    // TODO: Implement LinkedIn Sign In
+  }
+
+  void _githubSignIn() {
+    // TODO: Implement GitHub Sign In
+  }
+
+  void _phoneSignIn() {
+    // TODO: Implement Phone Number Sign In
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F8FD),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFF3A5A), Color(0xFFFF7539)], // Tinder-like gradient
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Title
+              // Logo
+              const Icon(Icons.local_fire_department,
+                  size: 80, color: Colors.white),
+              const SizedBox(height: 16),
               const Text(
-                "Welcome Back",
+                "MyApp",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                "Sign in to continue your journey",
-                style: TextStyle(color: Colors.black54, fontSize: 16),
               ),
               const SizedBox(height: 40),
 
-              // Card Container
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Login to Your Account",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 20),
-
-                    // Email
-                    TextField(
-                      controller: _emailCtrl,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.email_outlined),
-                        labelText: "Email",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+                    _buildSignInButton(
+                      onPressed: _googleSignIn,
+                      icon: Icons.g_mobiledata,
+                      label: "Continue with Google",
                     ),
-                    const SizedBox(height: 20),
-
-                    // Password
-                    TextField(
-                      controller: _passwordCtrl,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () =>
-                              setState(() => _obscurePassword = !_obscurePassword),
-                        ),
-                        labelText: "Password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+                    const SizedBox(height: 12),
+                    _buildSignInButton(
+                      onPressed: _linkedinSignIn,
+                      icon: Icons.link,
+                      label: "Continue with LinkedIn",
                     ),
-                    const SizedBox(height: 30),
-
-                    // Sign In button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: ElevatedButton(
-                        onPressed: _signIn,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text("Sign In",
-                            style:
-                            TextStyle(fontSize: 16, color: Colors.white)),
-                      ),
+                    const SizedBox(height: 12),
+                    _buildSignInButton(
+                      onPressed: _githubSignIn,
+                      icon: Icons.code,
+                      label: "Continue with GitHub",
+                    ),
+                    const SizedBox(height: 12),
+                    _buildSignInButton(
+                      onPressed: _phoneSignIn,
+                      icon: Icons.phone,
+                      label: "Continue with Phone number",
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
-              // OR Divider
-              Row(
-                children: const [
-                  Expanded(child: Divider(thickness: 1)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text("OR"),
+              // Terms text
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  "By tapping 'Sign in', you agree to our Terms. Learn how we process your data in our Privacy Policy and Cookies Policy.",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
                   ),
-                  Expanded(child: Divider(thickness: 1)),
-                ],
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 20),
 
-              // Google Sign In
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton.icon(
-                  onPressed: _googleSignIn,
-                  icon: const Icon(Icons.g_mobiledata, size: 28),
-                  label: const Text("Continue with Google",
-                      style: TextStyle(fontSize: 16)),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+              GestureDetector(
+                onTap: () {
+                  // TODO: Navigate to password reset/help
+                },
+                child: const Text(
+                  "Trouble signing in?",
+                  style: TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignInButton({
+    required VoidCallback onPressed,
+    required IconData icon,
+    required String label,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black87,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        icon: Icon(icon, size: 24),
+        label: Text(
+          label,
+          style: const TextStyle(fontSize: 16),
         ),
       ),
     );
