@@ -40,13 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // dark background
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Image.asset('assets/logo.png'), // replace with your logo
+          child: Image.asset('assets/logo.png'),
         ),
         actions: [
           IconButton(
@@ -59,38 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.black,
-        child: CardSwiper(
-          controller: controller,
-          cardsCount: opportunities.length,
-          cardBuilder: (context, index, percentX, percentY) {
-            final opp = opportunities[index];
-            return _buildOpportunityCard(opp);
-          },
-          onEnd: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("No more opportunities to show!"),
-                backgroundColor: Colors.deepPurple,
-              ),
-            );
-          },
-          allowedSwipeDirection: AllowedSwipeDirection.only(
-            left: true,
-            right: true,
-          ),
-
-          // 🔥 Tinder-like stacking
-          numberOfCardsDisplayed: 2, // show current + next card
-          scale: 0.9, // back card slightly smaller
-          backCardOffset: const Offset(0, 40), // peek effect
-          padding: EdgeInsets.zero,
-          maxAngle: 15,
-        ),
-      ),
+      body: _getBody(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         backgroundColor: Colors.black,
@@ -128,13 +97,77 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Returns body based on bottom nav index
+  Widget _getBody() {
+    switch (_currentIndex) {
+      case 0:
+        return _buildHomeBody();
+      case 1:
+        return _buildPlaceholder("Notifications");
+      case 2:
+        return _buildPlaceholder("Create");
+      case 3:
+        return _buildPlaceholder("Inbox");
+      case 4:
+        return _buildPlaceholder("Profile");
+      default:
+        return _buildHomeBody();
+    }
+  }
+
+  /// Home screen with CardSwiper
+  Widget _buildHomeBody() {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.black,
+      child: CardSwiper(
+        controller: controller,
+        cardsCount: opportunities.length,
+        cardBuilder: (context, index, percentX, percentY) {
+          final opp = opportunities[index];
+          return _buildOpportunityCard(opp);
+        },
+        onEnd: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("No more opportunities to show!"),
+              backgroundColor: Colors.deepPurple,
+            ),
+          );
+        },
+        allowedSwipeDirection: AllowedSwipeDirection.only(
+          left: true,
+          right: true,
+        ),
+        numberOfCardsDisplayed: 2,
+        scale: 0.9,
+        backCardOffset: const Offset(0, 40),
+        padding: EdgeInsets.zero,
+        maxAngle: 15,
+      ),
+    );
+  }
+
+  /// Dark-themed placeholder screen for other tabs
+  Widget _buildPlaceholder(String title) {
+    return Container(
+      color: Colors.black,
+      child: Center(
+        child: Text(
+          title,
+          style: const TextStyle(color: Colors.white, fontSize: 28),
+        ),
+      ),
+    );
+  }
+
   /// Builds a single opportunity card
   Widget _buildOpportunityCard(Map<String, dynamic> opp) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Stack(
         children: [
-          // Card background (dark but not full black)
           Container(
             color: const Color(0xFF1E1E1E),
             width: double.infinity,
@@ -145,10 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Tag
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 5),
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: Colors.redAccent.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
@@ -162,8 +194,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-
-                  // Title
                   Text(
                     opp["title"],
                     style: const TextStyle(
@@ -173,8 +203,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-
-                  // Description
                   Text(
                     opp["description"],
                     style: const TextStyle(
@@ -183,8 +211,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 15),
-
-                  // Skills
                   const Text(
                     "Required Skills:",
                     style: TextStyle(
@@ -206,8 +232,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Team + Deadline + Remote
                   Row(
                     children: [
                       const Icon(Icons.group, size: 18, color: Colors.white70),
@@ -243,18 +267,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-
                   Text(
                     "Posted by ${opp["postedBy"]}",
                     style: const TextStyle(color: Colors.grey),
                   ),
-                  const SizedBox(height: 100), // space for buttons
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
           ),
-
-          // Gradient overlay at bottom
           Positioned(
             left: 0,
             right: 0,
@@ -273,8 +294,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
-          // Action buttons
           Positioned(
             bottom: 20,
             left: 20,
