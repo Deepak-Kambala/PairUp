@@ -1,3 +1,4 @@
+// home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final CardSwiperController controller = CardSwiperController();
-  int _currentIndex = 0;
+  bool _isOutOfCards = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,64 +60,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: _getBody(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        backgroundColor: Colors.black,
-        selectedItemColor: Colors.redAccent,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle),
-            label: 'Create',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Inbox',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      body: _buildHomeBody(),
     );
   }
 
-  /// Returns body based on bottom nav index
-  Widget _getBody() {
-    switch (_currentIndex) {
-      case 0:
-        return _buildHomeBody();
-      case 1:
-        return _buildPlaceholder("Notifications");
-      case 2:
-        return _buildPlaceholder("Create");
-      case 3:
-        return _buildPlaceholder("Inbox");
-      case 4:
-        return _buildPlaceholder("Profile");
-      default:
-        return _buildHomeBody();
-    }
-  }
-
-  /// Home screen with CardSwiper
   Widget _buildHomeBody() {
+    if (_isOutOfCards) {
+      return const Center(
+        child: Text(
+          "🎉 Out of opportunities!\nCheck back later.",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white70, fontSize: 22),
+        ),
+      );
+    }
+
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -124,17 +82,15 @@ class _HomeScreenState extends State<HomeScreen> {
       child: CardSwiper(
         controller: controller,
         cardsCount: opportunities.length,
+        isLoop: false,
         cardBuilder: (context, index, percentX, percentY) {
           final opp = opportunities[index];
           return _buildOpportunityCard(opp);
         },
         onEnd: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("No more opportunities to show!"),
-              backgroundColor: Colors.deepPurple,
-            ),
-          );
+          setState(() {
+            _isOutOfCards = true;
+          });
         },
         allowedSwipeDirection: AllowedSwipeDirection.only(
           left: true,
@@ -149,20 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Dark-themed placeholder screen for other tabs
-  Widget _buildPlaceholder(String title) {
-    return Container(
-      color: Colors.black,
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(color: Colors.white, fontSize: 28),
-        ),
-      ),
-    );
-  }
-
-  /// Builds a single opportunity card
   Widget _buildOpportunityCard(Map<String, dynamic> opp) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),

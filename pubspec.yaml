@@ -32,6 +32,8 @@ dependencies:
     sdk: flutter
   flutter_card_swiper: ^7.0.2  # Tinder-style swipe cards
   cached_network_image: ^3.2.3  # Optional: image caching
+  image_picker: ^1.2.0 # Profile Image
+  url_launcher: ^6.3.2 # Clickable links like Github
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

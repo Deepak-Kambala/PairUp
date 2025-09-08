@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   size: 80, color: Colors.white),
               const SizedBox(height: 16),
               const Text(
-                "MyApp",
+                "PairUp",
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
